@@ -1,0 +1,11 @@
+---
+- hosts: all
+  remote_user: vagrant
+  become: true
+  roles:
+    - users
+
+- hosts: all
+  remote_user: root
+  roles:
+    - docker
