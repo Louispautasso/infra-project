@@ -1,0 +1,45 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+########
+# Check for vagrant-vbguest plugin
+if !Vagrant.has_plugin?('vagrant-vbguest')
+  puts "Vbguest vagrant plugin missing, run the following: "
+  puts "  vagrant plugin install vagrant-vbguest"
+  exit
+end
+# Check for hostsupdater plugin
+if !Vagrant.has_plugin?('vagrant-hostsupdater')
+  puts "Hostsupdater vagrant plugin missing, run the following: "
+  puts "  vagrant plugin install vagrant-hostsupdater"
+  exit
+end
+####
+servers = [
+  { :hostname => 'registry', :ip => '192.168.99.10', :box => 'debian/buster64' },
+  { :hostname => 'swarm01', :ip => '192.168.99.21', :box => 'debian/buster64' },
+  { :hostname => 'swarm02', :ip => '192.168.99.22', :box => 'debian/buster64' },
+  { :hostname => 'swarm03', :ip => '192.168.99.23', :box => 'debian/buster64' },
+]
+Vagrant.configure("2") do |config|
+  #####
+  # Foreach hosts : Installing Python minimal
+  config.vm.provision "shell", inline: "apt-get update && apt-get install -y python-minimal"
+  #####
+#####
+  ## Foreach hosts
+  servers.each do |server|
+    # server01 specific tasks
+    config.vm.define server[:hostname] do |serverconfig|
+      # OS
+      serverconfig.vm.box = server[:box]
+      if defined? server[:version]
+        serverconfig.vm.box_version = server[:version]
+      end
+# Network
+      serverconfig.vm.hostname = server[:hostname]
+      serverconfig.vm.network "private_network", ip: server[:ip]
+      serverconfig.hostsupdater.aliases = ["#{server[:hostname]}.local"]
+    end
+  end
+end
+
