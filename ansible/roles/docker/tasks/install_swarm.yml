@@ -1,0 +1,38 @@
+---
+- name: Add the inventory into /etc/hosts when advertise_addr is defined
+  lineinfile:
+    dest: /etc/hosts
+    regexp: '.*{{ item }}$'
+    line: "{{ hostvars[item]['ansible_' + swarm.nodes.advertise_addr]['ipv4']['address'] }} {{item}}"
+    state: present
+  when:
+    - (swarm.nodes.advertise_addr is defined)
+    - (swarm.nodes.advertise_addr != "")
+  with_items:
+    - "{{ swarm.nodes.manager }}"
+
+- name: SWARM | Init swarm
+  docker_swarm:
+    state: present
+    advertise_addr: "{{ swarm.nodes.advertise_addr }}"
+  run_once: true
+  when: inventory_hostname in swarm.nodes.initiator
+  
+- name: SWARM | Get join-token manager
+  shell: "docker swarm join-token -q manager"
+  delegate_to: "{{ swarm.nodes.initiator }}"
+  delegate_facts: true
+  run_once: true
+  register: token_manager
+
+- name: SWARM | Show token manager
+  run_once: true
+  debug:
+    var: token_manager.stdout 
+
+- name: SWARM | Add nodes
+  docker_swarm:
+    state: join
+    advertise_addr: "{{ swarm.nodes.advertise_addr }}"
+    join_token: "{{ token_manager.stdout }}"
+    remote_addrs: "{{ swarm.nodes.initiator }}:{{ swarm.nodes.manager_port }}"

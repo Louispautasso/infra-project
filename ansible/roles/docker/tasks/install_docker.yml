@@ -1,0 +1,32 @@
+---
+- name: Install apt gpg keys
+  apt_key:
+    url: "{{ item.gpg_key }}"
+    validate_certs: no
+    state: present
+  become: yes
+  with_items:
+    - "{{ docker.apt.repositories }}"
+
+- name: Install extra apt repositories for packages
+  apt_repository:
+    repo: "{{ item.url }}"
+    state: "{{ item.state }}"
+    filename: "{{ item.filename }}"
+    update_cache: no
+  with_items:
+    - "{{ docker.apt.repositories }}"
+
+- name: Execute apt-get update
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: Ensure Docker packages are installed
+  apt:
+    name: "{{ item.name }}={{ item.version }}"
+    update_cache: true
+    force_apt_get: true
+    state: "{{ item.state | default('present') }}"
+  with_items:
+    - "{{ docker.apt.packages }}"

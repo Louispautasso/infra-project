@@ -1,0 +1,6 @@
+---
+- name: SWARM | Init swarm on StandAlone
+  docker_swarm:
+    state: present
+    advertise_addr: "192.168.99.10:{{ swarm.nodes.advertise_addr }}"
+  

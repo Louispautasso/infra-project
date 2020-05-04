@@ -1,0 +1,32 @@
+---
+# defaults file for docker
+
+packages:
+   - {name: apt-transport-https, version: "*"}
+   - {name: ca-certificates, version: "*"}
+   - {name: curl, version: "*"}
+   - {name: gnupg-agent, version: "*"}
+   - {name: software-properties-common, version: "*"}
+   - {name: python-docker, version: "*"}
+
+docker:
+  apt:
+    config_dir: "/etc/apt/apt.conf.d/"
+    repositories:
+      - name: "Docker repository"
+        url: "deb https://download.docker.com/linux/{{ ansible_distribution|lower }} {{ ansible_distribution_release }} stable"
+        gpg_key: "https://download.docker.com/linux/debian/gpg"
+        filename: "docker"
+        state: "present"
+    packages:
+      - {name: docker-ce, version: "*"}
+      - {name: docker-ce-cli, version: "*"}
+      - {name: containerd.io, version: "*"}
+
+swarm:
+  nodes: 
+    manager: "{{ groups['swarm'] }}" # groups or host in inventory
+    manager_port: "2377" 
+    worker: "" 
+    initiator: "{{ groups['swarm'][0] }}"
+    advertise_addr: "eth1"

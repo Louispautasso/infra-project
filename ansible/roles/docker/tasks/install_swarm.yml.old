@@ -1,0 +1,78 @@
+---
+- name: CLUSTER | Get swarm status
+  command: "docker info -f {% raw %}'{{ .Swarm.LocalNodeState }}'{% endraw %}"
+  check_mode: no
+  register: swarm_status
+
+- name: Show swarm status value
+  debug:
+    msg: "{{ swarm_status.stdout }}"
+
+- name: CLUSTER | Set swarm state facts
+  set_fact:
+    swarm_node_active: "{{ swarm_status.stdout }}"
+
+- name: CLUSTER | Show swarm node active
+  debug:
+    msg: "status : {{ swarm_node_active }}"
+
+- name: Show value of swarm.nodes.initiator
+  debug:
+    msg: "{{ swarm.nodes.initiator }}"
+
+- name: Add the inventory into /etc/hosts when advertise_addr is defined
+  lineinfile:
+    dest: /etc/hosts
+    regexp: '.*{{ item }}$'
+    line: "{{ hostvars[item]['ansible_' + swarm.nodes.advertise_addr]['ipv4']['address'] }} {{item}}"
+    state: present
+  when:
+    - (swarm.nodes.advertise_addr is defined)
+    - (swarm.nodes.advertise_addr != "")
+  with_items:
+    - "{{ swarm.nodes.manager }}"
+
+- name: CLUSTER | Init swarm
+  shell: "docker swarm init --advertise-addr {{ swarm.nodes.advertise_addr | default(ansible_default_ipv4.interface) }}"
+  delegate_to: "{{ swarm.nodes.initiator }}"
+  when:
+    - inventory_hostname in swarm.nodes.initiator
+    - swarm_node_active == 'inactive'
+
+- name: CLUSTER | Get join-token manager
+  shell: "docker swarm join-token -q manager"
+  delegate_to: "{{ swarm.nodes.initiator }}"
+  delegate_facts: true
+  run_once: true
+  register: token_manager
+
+- name: CLUSTER | Get join-token worker
+  shell: "docker swarm join-token -q worker"
+  delegate_to: "{{ swarm.nodes.initiator }}"
+  delegate_facts: true
+  run_once: true
+  register: token_worker
+
+- name: CLUSTER | Show token manager
+  run_once: true
+  debug:
+    var: token_manager.stdout
+
+- name: CLUSTER | Show token worker
+  run_once: true
+  debug:
+    var: token_worker.stdout
+
+- name: CLUSTER | Join node as a manager
+  shell: "docker swarm join --token '{{ token_manager.stdout }}' {{ swarm.nodes.initiator }}:{{ swarm.nodes.manager_port }}"
+  when:
+    - inventory_hostname != swarm.nodes.initiator
+    - inventory_hostname in swarm.nodes.manager
+    - swarm_node_active == 'inactive'
+
+- name: CLUSTER | Join node as a worker
+  shell: "docker swarm join --token '{{ token_worker.stdout }}' {{ swarm.nodes.initiator }}:{{ swarm.nodes.manager_port }}"
+  when:
+    - inventory_hostname != swarm.nodes.initiator
+    - inventory_hostname in swarm.nodes.worker
+    - swarm_node_active == 'inactive'
