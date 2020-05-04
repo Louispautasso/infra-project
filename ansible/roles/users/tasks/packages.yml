@@ -1,0 +1,5 @@
+- name: Ensure Sudo packages is installed
+  package:
+    state: present
+    name: sudo
+  tags: sudo

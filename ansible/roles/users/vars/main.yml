@@ -1,0 +1,31 @@
+---
+# vars file for users
+project_users:
+  groups:
+    - name: readonly
+      gid: 2000
+      sudoable_commands:
+        - /bin/cat
+        - /usr/bin/tail
+        - /bin/systemctl status
+    - name: admins
+      gid: 2001
+
+  users:
+    - name: lpautasso
+      uid: 2000
+      state: present
+      id_key_pub: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDKoWEa6AyR+Pn4b2nQBEOtV4uu+DsiEHUNG0EuTR/TEdByccsxz9juXVzz6JoL0z8zGbHD8+Ohoum7zT1tuTLCnmdsc1LWhwDFyyQVtsPsTFOe//6dH83L93YWUJROkYg+n1oXXqq7e3jM9f43kQM4SAcpTjoT5wy2xlBJKtlt3nBykbuCthiFMlmjdi3IdnzSnqU8RdE424w0s/AQGexNzab0mJlVNFHn1R7DXwADti/QUL3c2C7eg/1i+grEO28L3n9qy0Q1sHHm0UudHWlWh17j7b5rP7XJm5GABssAiupMu37ezZr/v50iXZNYGtC9xgQ7Pvu/o+GV9n662nx9HvMFbBGab1x4+ftm4rBuF800jJpQgNRnko3tf0nOfaYz03NdcC3idqAqihiILmOhVQAngLi7ukkRig5n3s/44w17zTvOOqfF7pgYq7m1HSRfvVH6wEBVFHv4MgV3HzTpia1ye58eOuUMyMpf1h0vwugXjD0M1ut351oQAM5kIC9Mg84x0o6uiBr3gvaF7haDhj4O2Xzb/gZ2WAlnZcRV/WKVYDSw+uT1P8EwLstEfF5iySS4HaPqfxlOMud+Bc/WmFZh3LIvFLESYNTzA6N5VU/QyIRM7THSpbwMOsft9tbivmnAcBQn7HdyfzPyrQVRGozLAcnJsBylqIwgLZHOAw== louis.pautasso@kisio.org
+      group: admins
+
+    - name: msugac
+      uid: 2001
+      state: present
+      id_key_pub: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC1q0lENZUd+mEpSAqBO2fnHeLE8zPQ/bCfp+MQCYY41+Eq7lV64h2kzdtT+HySDUeiSoLFrsqSunccFQA++HPPxWXIl04sQQWkIOCp7ztejGXbKhivNoCck8/9E2Hdpzn3KG4kS81Zb9Ivo+2OhZTNTY4ZYQ+w5fUGE+afq/n0KoUAg9gwMP/ysl1mq8YnIzhspFG0Y0r3OezTmkjGRNDx72T8vTJfExsFTNiWNFy5OigJ9C0Sx+NBmbfz3CfWLgiA52RYn1UqTPkrrBfdQ9YlAPMM8jfLXYsLaHYKsmgOgbKlG3OuT34/Ww8LFDu7hkEfiqfvgxssFpFQ1NgHBGZY1O6ttLeFJRn1MOa8zxJuHhwhDuO1of3DkhiqHfmYzPo5OFkVX9hb5LUs9wcFw53+5gAV3AFQ6SKgJ0Jc9pE1sbjhSS5rNFQepvnLyKvmWKVASWmGHy+K50yX/mDneG5FnVtbFDeAfDJWgiiQSG4YJHMh5BWS8v+nzrorGTuhYLFWwQQtyLC8anF9pGO/gzTz64jQlNBTiKWI8rz54w7gLAFTNlqCpayI+qHva2mJCGIShwzK/EniU0occHLQfCMiIGHEVJBoS1ccyRjhx3mfX9Io/HPjwZbFxp8GrWU3weTR1LrfT2Rfhuo8bHlTYLSC5guQZ9hpkR38B2I1zFYvvQ== alexandre.vallarino@kisio.com
+      group: admins
+
+    - name: jdoe
+      uid: 2002
+      state: present
+      id_key_pub: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC1q0lENZUd+mEpSAqBO2fnHeLE8zPQ/bCfp+MQCYY41+Eq7lV64h2kzdtT+HySDUeiSoLFrsqSunccFQA++HPPxWXIl04sQQWkIOCp7ztejGXbKhivNoCck8/9E2Hdpzn3KG4kS81Zb9Ivo+2OhZTNTY4ZYQ+w5fUGE+afq/n0KoUAg9gwMP/ysl1mq8YnIzhspFG0Y0r3OezTmkjGRNDx72T8vTJfExsFTNiWNFy5OigJ9C0Sx+NBmbfz3CfWLgiA52RYn1UqTPkrrBfdQ9YlAPMM8jfLXYsLaHYKsmgOgbKlG3OuT34/Ww8LFDu7hkEfiqfvgxssFpFQ1NgHBGZY1O6ttLeFJRn1MOa8zxJuHhwhDuO1of3DkhiqHfmYzPo5OFkVX9hb5LUs9wcFw53+5gAV3AFQ6SKgJ0Jc9pE1sbjhSS5rNFQepvnLyKvmWKVASWmGHy+K50yX/mDneG5FnVtbFDeAfDJWgiiQSG4YJHMh5BWS8v+nzrorGTuhYLFWwQQtyLC8anF9pGO/gzTz64jQlNBTiKWI8rz54w7gLAFTNlqCpayI+qHva2mJCGIShwzK/EniU0occHLQfCMiIGHEVJBoS1ccyRjhx3mfX9Io/HPjwZbFxp8GrWU3weTR1LrfT2Rfhuo8bHlTYLSC5guQZ9hpkR38B2I1zFYvvQ== alexandre.vallarino@kisio.com
+      group: readonly

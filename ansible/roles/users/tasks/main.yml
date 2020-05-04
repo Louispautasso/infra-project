@@ -1,0 +1,17 @@
+---
+# tasks file for users
+- name: Ensure necessary packages exists
+  import_tasks: packages.yml
+  tags: packages
+
+- name: Create groups if not exist
+  import_tasks: groups.yml
+  tags: groups
+
+- name: Create users && Deploy pub key
+  import_tasks: users.yml
+  tags: users
+
+- name: Create sudoers config via template
+  import_tasks: sudoers.yml
+  tags: sudoers

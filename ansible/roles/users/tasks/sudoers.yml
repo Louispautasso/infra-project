@@ -1,0 +1,11 @@
+---
+# Tasks file for sudoers config deployment
+- name: Deploying sudoers config
+  template:
+    src: sudoers.j2
+    dest: "/etc/sudoers.d/{{ item.name }}"
+    mode: 0440
+    validate: "visudo -cf %s"
+  with_items: 
+    - "{{ project_users.groups }}"
+  tags: sudoers

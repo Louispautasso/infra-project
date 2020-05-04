@@ -1,0 +1,32 @@
+---
+# Tasks file for users creation
+- name: Ensure nominative account exists
+  user:
+    name: "{{ item.name }}"
+    uid: "{{ item.uid }}"
+    shell: /bin/bash
+    group: "{{ item.group }}"
+    state: "{{ item.state }}"
+    force: no
+    remove: yes
+  with_items:
+    - "{{ project_users.users }}"
+
+- name: Deploying their pub key
+  authorized_key:
+    user: "{{ item.name }}"
+    state: "{{ item.state }}"
+    key: "{{ item.id_key_pub | default('') }}"
+  with_items:
+    - "{{ project_users.users }}"
+  when: item.state == "present"
+
+- name: Allowing admins members group to log as root
+  authorized_key:
+    user: root
+    state: "{{ item.state }}"
+    key: "{{ item.id_key_pub | default('') }}"
+  with_items:
+    - "{{ project_users.users }}"
+  when: item.group == "admins" 
+

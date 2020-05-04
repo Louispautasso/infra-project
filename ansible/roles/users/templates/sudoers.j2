@@ -1,0 +1,4 @@
+#jinja2:lstrip_blocks: True
+# {{ ansible_managed }}
+
+%{{ item.name }} ALL=(root:root) NOPASSWD: {{ item.sudoable_commands | default(['ALL']) | join(',') }}

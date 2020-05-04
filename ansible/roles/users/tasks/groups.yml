@@ -1,0 +1,10 @@
+  
+---
+# Tasks file for groups creation
+- name: Ensure kisio groups exists
+  group:
+    name: "{{ item.name }}"
+    gid: "{{ item.gid }}"
+    state: present
+  with_items: 
+    - "{{ project_users.groups }}"
