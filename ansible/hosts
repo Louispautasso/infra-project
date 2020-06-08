@@ -1,7 +1,8 @@
 [standalone]
 registry
 
+haproxy
+
 [swarm]
 swarm01
 swarm02
-swarm03
