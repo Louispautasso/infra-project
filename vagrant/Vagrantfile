@@ -16,12 +16,19 @@ end
 ####
 servers = [
   { :hostname => 'registry', :ip => '192.168.99.10', :box => 'debian/buster64' },
+  { :hostname => 'haproxy', :ip => '192.168.99.15', :box => 'debian/buster64' },
   { :hostname => 'swarm01', :ip => '192.168.99.21', :box => 'debian/buster64' },
   { :hostname => 'swarm02', :ip => '192.168.99.22', :box => 'debian/buster64' },
-  { :hostname => 'swarm03', :ip => '192.168.99.23', :box => 'debian/buster64' },
+
 ]
 Vagrant.configure("2") do |config|
   #####
+    # Pushing my pubkey
+  id_rsa_pub = File.read("#{Dir.home}/.ssh/id_rsa.pub")
+  config.vm.provision "copy ssh public key",
+    type: "shell",
+    inline: "echo \"#{id_rsa_pub}\" >> /home/vagrant/.ssh/authorized_keys
+             mkdir -p /root/.ssh/ && echo \"#{id_rsa_pub}\" >> /root/.ssh/authorized_keys"
   # Foreach hosts : Installing Python minimal
   config.vm.provision "shell", inline: "apt-get update && apt-get install -y python-minimal"
   #####
