@@ -11,6 +11,8 @@ Ce repository consiste à:
  - Installer un HaProxy pour gerer le LoadBalancing entre les noeuds du cluster
  - Installer un outil de supervision de conteneurs et de serveurs
 
+**Livraison en 5min top chrono si les machines sont déjà existente**
+
 Les machines:
  - Registry: 192.168.99.10 // Debian 10
  - HaProxy: 192.168.99.15 // Debian 10
