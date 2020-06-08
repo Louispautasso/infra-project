@@ -7,11 +7,6 @@
 - name: Install Docker
   import_tasks: install_docker.yml
 
-- name: Install Swarm for a clustering
-  import_tasks: install_swarm.yml
-  when: inventory_hostname in groups['swarm']
-  tags: swarm
-
 - name: Install Swarm for a standalone
   import_tasks: install_standalone_swarm.yml
   when: inventory_hostname in groups['standalone']

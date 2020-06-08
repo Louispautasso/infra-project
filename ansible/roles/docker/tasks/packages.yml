@@ -1,10 +1,4 @@
 ---
-- name: Update the apt package index
-  apt:
-    name: "*"
-    state: latest
-    update_cache: yes
-    force_apt_get: yes
 
 - name: Ensure necessary packages are present
   apt:
