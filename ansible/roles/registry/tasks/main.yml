@@ -1,0 +1,29 @@
+---
+# tasks file for registry
+
+- name: Run Docker Registry
+  docker_container:
+    name: registry
+    image: registry:2
+    restart_policy: always
+    ports: "5000:5000"
+
+- name: Create Netdata repo
+  file:
+    path: /srv/netdata
+    state: directory
+
+- name: Put Netdata Dockerfile
+  copy:
+    src: netdata/Dockerfile
+    dest: /srv/netdata/
+
+- name: Build image
+  shell: docker build -t netdata /srv/netdata/
+
+- name: Add tag
+  shell: docker tag netdata registry:5000/netdata
+
+- name: Push to registry
+  shell: docker push registry:5000/netdata
+    
