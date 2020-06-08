@@ -4,8 +4,35 @@
   become: true
   roles:
     - users
+  tags: users
 
-- hosts: all
+- hosts: swarm
+  remote_user: root
+  roles:
+    - swarm     
+  tags: swarm
+
+- hosts: registry
   remote_user: root
   roles:
     - docker
+  tags: docker
+
+- hosts: haproxy
+  remote_user: root
+  roles:
+    - haproxy
+  tags: haproxy
+
+- hosts: registry
+  remote_user: root
+  roles: 
+    - registry
+  tags: registry
+
+- hosts: swarm
+  remote_user: root
+  roles:
+    - netdata
+  tags: netdata
+
