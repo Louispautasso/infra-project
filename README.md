@@ -50,3 +50,7 @@ Se connecter aux noeuds du cluster Swarm sur le port 19999 (Application Netdata)
 Se connecter aux noeuds du cluster Swarm par le biais de l'HaProxy
 
 [http://192.168.99.15:19999/](http://192.168.99.15:19999/)
+
+Regarder la bibliotheque d'image sur la registry
+
+	curl -X GET http://192.168.99.10:5000/v2/_catalog
