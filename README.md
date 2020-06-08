@@ -45,7 +45,7 @@ Se connecter aux noeuds du cluster Swarm sur le port 19999 (Application Netdata)
 
 [http://192.168.99.21:19999/](http://192.168.99.21:19999/)
 
-[http://192.168.99.22:19999/](http://192.168.99.21:19999/)
+[http://192.168.99.22:19999/](http://192.168.99.22:19999/)
 
 Se connecter aux noeuds du cluster Swarm par le biais de l'HaProxy
 
