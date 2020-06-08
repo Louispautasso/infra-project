@@ -1,0 +1,9 @@
+---
+- name: Ensure necessary packages are present
+  apt:
+    name: "{{ item.name }}={{ item.version }}"
+    update_cache: true
+    force_apt_get: true
+    state: "{{ item.state | default('present') }}"
+  with_items:
+    - "{{ packages }}"

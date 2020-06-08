@@ -1,0 +1,14 @@
+---
+# tasks file for docker
+
+- name: Ensure necessary packages exists
+  import_tasks: packages.yml
+
+- name: Install Docker
+  import_tasks: install_docker.yml
+
+- name: Install Swarm for a clustering
+  import_tasks: install_swarm.yml
+  when: inventory_hostname in groups['swarm']
+  tags: swarm
+

@@ -1,0 +1,51 @@
+---
+
+- name: get facts
+  setup:
+    gather_subset:
+      - all
+
+- name: Add nodes in the inventory into /etc/hosts when advertise_addr is defined
+  lineinfile:
+    dest: /etc/hosts
+    regexp: '.*{{ item }}$'
+    line: "{{ hostvars[item]['ansible_eth1']['ipv4']['address'] }} {{item}}"
+    state: present
+  when:
+    - (swarm.nodes.advertise_addr is defined)
+    - (swarm.nodes.advertise_addr != "")
+  with_items:
+    - "{{ swarm.nodes.manager }}"
+
+- name: Add registry in /etc/hosts
+  lineinfile:
+    dest: /etc/hosts
+    regexp: "registry"
+    line: "192.168.99.10 registry"
+    state: present
+
+- name: SWARM | Init swarm
+  docker_swarm:
+    state: present
+    advertise_addr: "{{ swarm.nodes.advertise_addr }}"
+  run_once: true
+
+- name: SWARM | Get join-token manager
+  shell: "docker swarm join-token -q manager"
+  delegate_to: "{{ swarm.nodes.initiator }}"
+  delegate_facts: true
+  register: token_manager
+  run_once: true
+
+- name: SWARM | Show token manager
+  debug:
+    var: token_manager.stdout 
+
+- name: SWARM | Add nodes
+  docker_swarm:
+    state: join
+    advertise_addr: "{{ swarm.nodes.advertise_addr }}"
+    join_token: "{{ token_manager.stdout }}"
+    remote_addrs: "{{ swarm.nodes.initiator }}:{{ swarm.nodes.manager_port }}"
+
+
