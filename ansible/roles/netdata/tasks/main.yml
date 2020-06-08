@@ -6,9 +6,9 @@
     src: daemon.json
     dest: /etc/docker/daemon.json
 
-    #- name: Restart docker
-    #  shell: systemctl restart docker
-    #  tags: restart
+- name: Restart docker
+  shell: systemctl restart docker
+  tags: restart
 
 - name: install docker-compose
   shell: apt install docker-compose -y
