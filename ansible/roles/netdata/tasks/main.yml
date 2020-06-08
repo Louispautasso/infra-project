@@ -6,20 +6,22 @@
     src: daemon.json
     dest: /etc/docker/daemon.json
 
-- name: Restart docker
-  shell: systemctl restart docker
-  tags: restart
+    #- name: Restart docker
+    #  shell: systemctl restart docker
+    #  tags: restart
+
+- name: install docker-compose
+  shell: apt install docker-compose -y
 
 - name: Create netdata dir
   file:
     path: /srv/netdata
     state: directory
 
-- name: Deploy Compose template Netdata
-  copy:
-    src: docker-compose.yml
+- name: Deploy Compose template
+  template:
+    src: docker-compose-netdata.j2
     dest: /srv/netdata/docker-compose.yml
 
-- name: Deploy Netdata stack
-  shell: docker stack deploy -c /srv/netdata/docker-compose.yml netdata
-  run_once: true
+- name: Docker Compose up
+  shell: "cd /srv/netdata && docker-compose up -d" 

@@ -3,7 +3,7 @@ services:
   netdata:
     image: registry:5000/netdata:latest
     container_name: netdata
-    hostname: '{{.Node.Hostname}}'
+    hostname: {{ ansible_hostname}}
     ports:
       - 19999:19999
     restart: unless-stopped
