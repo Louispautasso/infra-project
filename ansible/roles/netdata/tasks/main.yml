@@ -1,0 +1,25 @@
+---
+# tasks file for containers
+
+- name: Add unsecure Registry 
+  copy:
+    src: daemon.json
+    dest: /etc/docker/daemon.json
+
+- name: Restart docker
+  shell: systemctl restart docker
+  tags: restart
+
+- name: Create netdata dir
+  file:
+    path: /srv/netdata
+    state: directory
+
+- name: Deploy Compose template Netdata
+  copy:
+    src: docker-compose.yml
+    dest: /srv/netdata/docker-compose.yml
+
+- name: Deploy Netdata stack
+  shell: docker stack deploy -c /srv/netdata/docker-compose.yml netdata
+  run_once: true
