@@ -1,7 +1,7 @@
   
 ---
 # Tasks file for groups creation
-- name: Ensure kisio groups exists
+- name: Ensure groups exists
   group:
     name: "{{ item.name }}"
     gid: "{{ item.gid }}"
