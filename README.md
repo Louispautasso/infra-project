@@ -11,6 +11,8 @@ Ce repository consiste à:
  - Installer un HaProxy pour gerer le LoadBalancing entre les noeuds du cluster
  - Installer un outil de supervision de conteneurs et de serveurs
 
+**Livraison en 5min top chrono si les machines sont déjà existente**
+
 Les machines:
  - Registry: 192.168.99.10 // Debian 10
  - HaProxy: 192.168.99.15 // Debian 10
@@ -45,8 +47,12 @@ Se connecter aux noeuds du cluster Swarm sur le port 19999 (Application Netdata)
 
 [http://192.168.99.21:19999/](http://192.168.99.21:19999/)
 
-[http://192.168.99.22:19999/](http://192.168.99.21:19999/)
+[http://192.168.99.22:19999/](http://192.168.99.22:19999/)
 
 Se connecter aux noeuds du cluster Swarm par le biais de l'HaProxy
 
 [http://192.168.99.15:19999/](http://192.168.99.15:19999/)
+
+Regarder la bibliotheque d'image sur la registry
+
+	curl -X GET http://192.168.99.10:5000/v2/_catalog
